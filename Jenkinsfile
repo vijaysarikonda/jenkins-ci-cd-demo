@@ -4,45 +4,33 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/<your-username>/jenkins-ci-cd-demo.git'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo 'Building the application...'
+                git branch: 'main', url: 'https://github.com/vijaysarikonda/jenkins-ci-cd-demo.git'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip3 install -r requirements.txt'
+                sh 'python3 -m venv venv'
+                sh './venv/bin/pip install -r requirements.txt'
             }
         }
 
-        stage('Test') {
+        stage('Run Tests') {
             steps {
-                sh 'pytest --maxfail=1 --disable-warnings -q'
+                sh './venv/bin/python -m unittest discover -s . -p "test_*.py"'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Build stage placeholder (e.g., docker build, package app, etc.)'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying application (simulation)...'
-                sh 'python3 app.py'
+                echo 'Deploy stage placeholder (copy files, run docker, etc.)'
             }
-        }
-    }
-
-    post {
-        always {
-            echo 'Pipeline finished. ✅'
-        }
-        success {
-            echo 'Build & Tests Passed 🎉'
-        }
-        failure {
-            echo 'Build Failed ❌'
         }
     }
 }
