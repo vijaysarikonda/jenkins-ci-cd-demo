@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Hello from Flask CI/CD pipeline!"
+    return "🚀 Welcome to my First Jenkins pipeline vijay!"
 
 @app.route('/health')
 def health():
@@ -12,7 +12,3 @@ def health():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5050)
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
-
