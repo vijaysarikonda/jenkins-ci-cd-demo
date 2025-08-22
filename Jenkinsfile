@@ -8,28 +8,21 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Build Docker Image') {
             steps {
-                sh 'python3 -m venv venv'
-                sh './venv/bin/pip install -r requirements.txt'
+                sh 'docker build -t flask-demo-app .'
             }
         }
 
-        stage('Run Tests') {
+        stage('Stop Old Container') {
             steps {
-                sh './venv/bin/python -m unittest discover -s . -p "test_*.py"'
+                sh 'docker stop flask-demo || true && docker rm flask-demo || true'
             }
         }
 
-        stage('Build') {
+        stage('Run New Container') {
             steps {
-                echo 'Build stage placeholder (e.g., docker build, package app, etc.)'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploy stage placeholder (copy files, run docker, etc.)'
+                sh 'docker run -d --name flask-demo -p 5050:5050 flask-demo-app'
             }
         }
     }
