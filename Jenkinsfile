@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = "flask-demo-app"
+        CONTAINER_NAME = "flask-demo"
+        PORT = "5050"
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -10,19 +16,19 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t flask-demo-app .'
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
 
-        stage('Stop Old Container') {
+        stage('Stop & Remove Old Container') {
             steps {
-                sh 'docker stop flask-demo || true && docker rm flask-demo || true'
+                sh 'docker rm -f $CONTAINER_NAME || true'
             }
         }
 
         stage('Run New Container') {
             steps {
-                sh 'docker run -d --name flask-demo -p 5050:5050 flask-demo-app'
+                sh 'docker run -d --name $CONTAINER_NAME -p $PORT:$PORT $IMAGE_NAME'
             }
         }
     }
